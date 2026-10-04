@@ -1,0 +1,15 @@
+[Unit]
+Description=__REPO__ MQTT node
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/__REPO__
+ExecStart=/opt/__REPO__/.venv/bin/python -m __PACKAGE__.main --config /opt/__REPO__/config.ini
+Restart=on-failure
+RestartSec=5
+User=renewvan
+
+[Install]
+WantedBy=multi-user.target
