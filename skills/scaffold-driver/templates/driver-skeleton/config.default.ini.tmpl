@@ -1,4 +1,4 @@
-; __REPO__ — __ENTITY_TITLE__ node configuration
+; __REPO__ — __ENTITY_TITLE__ device configuration
 ; ====================================================
 ; This file ships with the package and contains every available setting
 ; with a safe default. DO NOT EDIT — create a config.ini instead and
@@ -14,9 +14,9 @@ client_id = __REPO__
 reconnect_min_delay = 1.0
 reconnect_max_delay = 30.0
 
-[node]
+[device]
 id = __ENTITY__
 update_interval_ms = 3000
 ; TODO: add __ENTITY_TITLE__-specific keys here once the hardware/feed
 ; interface is decided (serial port, I2C address, remote feed host,
-; baud rate, ...) — mirror them in __PACKAGE__/config.py's NodeConfig.
+; baud rate, ...) — mirror them in __PACKAGE__/config.py's DeviceConfig.

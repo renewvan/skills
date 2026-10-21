@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Scaffold a new renewvan/node-<entity> repo from the node-tank reference
-shape (templates/node-skeleton). One step of ../SKILL.md -- run this after
+"""Scaffold a new renewvan/driver-<entity> repo from the driver-tank reference
+shape (templates/driver-skeleton). One step of ../SKILL.md -- run this after
 collecting entity-slug, entity-title, description, and target-dir from the
 user; don't hand-copy template files yourself.
 
@@ -15,7 +15,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-TEMPLATE_DIR = SCRIPT_DIR.parent / "templates" / "node-skeleton"
+TEMPLATE_DIR = SCRIPT_DIR.parent / "templates" / "driver-skeleton"
 
 ENTITY_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 
@@ -37,8 +37,8 @@ def main() -> None:
         )
         raise SystemExit(1)
 
-    package = f"node_{entity}"
-    repo = f"node-{entity.replace('_', '-')}"
+    package = f"driver_{entity}"
+    repo = f"driver-{entity.replace('_', '-')}"
     tokens = {
         "__ENTITY__": entity,
         "__ENTITY_TITLE__": entity_title,
