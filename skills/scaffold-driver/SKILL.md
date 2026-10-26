@@ -22,7 +22,8 @@ decisions):
   topic segment (`renewvan/gps/...`), the Python package (`driver_gps`), and
   the repo name (`driver-gps`).
 - **One-line description** for `pyproject.toml`/README/GitHub repo
-  description.
+  description. Must not contain `"`, `\` or newlines (they land in TOML/INI
+  files; the script rejects them).
 - **Target directory**. Default: a `driver-<entity>` sibling next to whichever
   `renewvan/*` repo the agent is currently in (e.g. `../driver-gps` next to
   `hub`) — ask only if that default is ambiguous.
@@ -43,25 +44,33 @@ script copies `templates/driver-skeleton/`, substitutes
 `__YEAR__` in every path and file, renames the package directory, and strips
 `.tmpl` suffixes — it is deterministic; don't hand-copy or retype any
 template file yourself. Refuses to run over an existing target directory
-and rejects a malformed entity slug.
+and rejects a malformed entity slug. It removes the target if generation
+fails midway, checks that no `__TOKEN__` placeholder survives, and prints
+`REPO=… PACKAGE=…` on its last line: **use that repo name below, not
+`driver-<entity>`** — underscores in the slug become hyphens in the repo name
+(`gps_fix` → `driver-gps-fix`) but stay underscores in the package.
 
 ## Step 3 — Commit and publish
 
 ```
-cd <target-dir> && git init -b main && git add -A && git commit -m "Scaffold driver-<entity> from the driver-tank reference shape"
+cd <target-dir> && git init -b main && git add -A && git commit -m "Scaffold <repo> from the driver-tank reference shape"
 ```
 
 If GitHub was requested:
 
 ```
-gh repo create renewvan/driver-<entity> --public --source=. --remote=origin --push
+gh repo create renewvan/<repo> --public --source=. --remote=origin --push
 ```
 
 ## Step 4 — Smoke-verify
 
 ```
-pip install -r requirements.txt -r requirements-test.txt && pytest tests/ -v
+cd <target-dir> && python3 -m venv .venv && . .venv/bin/activate \
+  && pip install -r requirements.txt -r requirements-test.txt && pytest tests/ -v
 ```
+
+(A venv keeps the install out of the user's global Python; the skeleton's
+`.gitignore` already covers `.venv/`.)
 
 Must pass out of the box (defaults only, no hardware/broker needed) — the
 scaffolded test only exercises `config.py`'s layered loader. A failure here

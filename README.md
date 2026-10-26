@@ -37,6 +37,18 @@ integration) so a real device still gets designed, not left half-built.
 
 See `skills/scaffold-driver/SKILL.md` for the full process.
 
+### `build-basemap`
+
+Builds the dashboard's offline `basemap.pmtiles` for a region, city or country
+by name: resolves the area to a bounding box (or outline) via Nominatim, picks
+a Protomaps v4 build, dry-runs `pmtiles extract` to size it, extracts,
+verifies the file (including that tiles exist under a given point), and
+optionally pushes it to the Pi with the hub's script. Follows
+`renewvan/dashboard`'s `docs/offline-map.md`; the self-build from OpenStreetMap
+route is out of scope.
+
+See `skills/build-basemap/SKILL.md` for the full process.
+
 ## Development
 
 `skills/scaffold-driver/scripts/scaffold.py` is the one piece of real code

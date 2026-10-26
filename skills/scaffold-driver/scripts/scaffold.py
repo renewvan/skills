@@ -10,6 +10,7 @@ Usage: scaffold.py <entity-slug> <entity-title> <description> <target-dir>
 from __future__ import annotations
 
 import re
+import shutil
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -18,6 +19,8 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 TEMPLATE_DIR = SCRIPT_DIR.parent / "templates" / "driver-skeleton"
 
 ENTITY_RE = re.compile(r"^[a-z][a-z0-9_]*$")
+DESCRIPTION_BAD_RE = re.compile(r'["\\\x00-\x1f]')
+TOKEN_RE = re.compile(r"__(?:ENTITY|ENTITY_TITLE|PACKAGE|REPO|DESCRIPTION|YEAR)__")
 
 
 def main() -> None:
@@ -48,6 +51,14 @@ def main() -> None:
         "__YEAR__": str(datetime.now(tz=timezone.utc).year),
     }
 
+    if DESCRIPTION_BAD_RE.search(description) or DESCRIPTION_BAD_RE.search(entity_title):
+        print(
+            'description and entity-title must not contain ", \\ or control characters '
+            "(they are written into TOML and INI files)",
+            file=sys.stderr,
+        )
+        raise SystemExit(1)
+
     target = Path(target_dir).expanduser().resolve()
     if target.exists():
         print(f"Target already exists: {target}", file=sys.stderr)
@@ -57,6 +68,17 @@ def main() -> None:
         print(f"Template directory missing: {TEMPLATE_DIR}", file=sys.stderr)
         raise SystemExit(1)
 
+    try:
+        render(tokens, target)
+    except BaseException:
+        shutil.rmtree(target, ignore_errors=True)  # never leave a half-built repo behind
+        raise
+
+    print(f"Scaffolded {repo} at {target}")
+    print(f"REPO={repo}  PACKAGE={package}")
+
+
+def render(tokens: dict[str, str], target: Path) -> None:
     for src in sorted(TEMPLATE_DIR.rglob("*")):
         rel_str = str(src.relative_to(TEMPLATE_DIR))
         for token, value in tokens.items():
@@ -78,7 +100,20 @@ def main() -> None:
             text = text.replace(token, value)
         dest.write_text(text)
 
-    print(f"Scaffolded {repo} at {target}")
+    leftovers = [
+        str(p.relative_to(target))
+        for p in target.rglob("*")
+        if p.is_file() and TOKEN_RE.search(p.name + _safe_text(p))
+    ]
+    if leftovers:
+        raise RuntimeError(f"unreplaced __TOKEN__ placeholders in: {', '.join(leftovers)}")
+
+
+def _safe_text(path: Path) -> str:
+    try:
+        return path.read_text()
+    except UnicodeDecodeError:
+        return ""
 
 
 if __name__ == "__main__":

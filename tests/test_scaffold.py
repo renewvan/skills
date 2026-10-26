@@ -10,7 +10,11 @@ import sys
 from pathlib import Path
 
 SCAFFOLD = (
-    Path(__file__).resolve().parent.parent / "skills" / "scaffold-driver" / "scripts" / "scaffold.py"
+    Path(__file__).resolve().parent.parent
+    / "skills"
+    / "scaffold-driver"
+    / "scripts"
+    / "scaffold.py"
 )
 
 
@@ -51,6 +55,30 @@ def test_scaffold_rejects_invalid_entity_slug(tmp_path: Path) -> None:
     target = tmp_path / "device-bad"
     result = subprocess.run(
         [sys.executable, str(SCAFFOLD), "Not-Valid", "X", "desc", str(target)],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode != 0
+    assert not target.exists()
+
+
+def test_scaffold_underscore_slug_gives_hyphenated_repo(tmp_path: Path) -> None:
+    target = tmp_path / "driver-gps-fix"
+    result = subprocess.run(
+        [sys.executable, str(SCAFFOLD), "gps_fix", "GPS Fix", "Test device", str(target)],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assert "REPO=driver-gps-fix  PACKAGE=driver_gps_fix" in result.stdout
+    assert (target / "driver_gps_fix" / "systemd" / "driver-gps-fix.service").exists()
+
+
+def test_scaffold_rejects_description_that_would_break_toml(tmp_path: Path) -> None:
+    target = tmp_path / "driver-bad"
+    result = subprocess.run(
+        [sys.executable, str(SCAFFOLD), "bad", "Bad", 'has "quotes"', str(target)],
         capture_output=True,
         text=True,
         check=False,
