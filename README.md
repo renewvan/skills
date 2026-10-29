@@ -1,7 +1,7 @@
 # renewvan/skills
 
 Installable agent skills for the **renewvan** ecosystem (see `renewvan/hub`'s
-`CONTEXT.md` for domain vocabulary). Five skills: `create-driver`, `port-dbus-driver`, `flash-esp32`, `build-basemap` and `deploy`.
+`CONTEXT.md` for domain vocabulary). Five skills: `renewvan-create-driver`, `renewvan-port-dbus-driver`, `renewvan-flash-esp32`, `renewvan-build-basemap` and `renewvan-deploy`.
 
 ## Variants and versions
 
@@ -44,7 +44,7 @@ cp -R /tmp/renewvan-skills/claude/* ~/.claude/skills/
 `mattpocock/skills` or `vercel-labs/skills`): point it at `renewvan/skills`,
 skill path `skills/<name>/SKILL.md` (general) or `claude/<name>/SKILL.md`.
 
-`renewvan/hub` ships its own copy of `deploy` under `.agents/skills/deploy`
+`renewvan/hub` ships its own copy of `renewvan-deploy` under `.agents/skills/deploy`
 (symlinked into `.claude/skills`), so you only need to install it here when
 working outside the hub checkout (it still needs a hub checkout to run).
 
@@ -52,15 +52,15 @@ working outside the hub checkout (it still needs a hub checkout to run).
 
 | Skill | Version | Use it to |
 | ----- | ------- | --------- |
-| `create-driver` | 2.0.0 | Bootstrap a new `driver-<entity>` repo and run its design round |
-| `port-dbus-driver` | 1.0.0 | Port a Venus OS D-Bus package to a native MQTT driver |
-| `flash-esp32` | 1.0.0 | Build and flash an ESP32 firmware variant, then verify it on the bus |
-| `build-basemap` | 1.1.0 | Build the dashboard's offline PMTiles basemap |
-| `deploy` | 1.0.0 | Deploy the hub to the Pi |
+| `renewvan-create-driver` | 3.0.0 | Bootstrap a new `driver-<entity>` repo and run its design round |
+| `renewvan-port-dbus-driver` | 2.0.0 | Port a Venus OS D-Bus package to a native MQTT driver |
+| `renewvan-flash-esp32` | 2.0.0 | Build and flash an ESP32 firmware variant, then verify it on the bus |
+| `renewvan-build-basemap` | 2.0.0 | Build the dashboard's offline PMTiles basemap |
+| `renewvan-deploy` | 2.0.0 | Deploy the hub to the Pi |
 
 How they fit together is in `renewvan/hub`'s `docs/agent-skills.md`.
 
-### `deploy`
+### `renewvan-deploy`
 
 Deploys the hub to a Raspberry Pi with `bin/deploy.sh` (rsync, venvs, systemd
 services, `docker compose pull && up -d`). Run it from the `renewvan/hub`
@@ -75,9 +75,9 @@ change, and the optional GPS profile. A table maps common failures (rsync
 permissions, missing `.env`, missing `tank/config.ini`, SSH drops) to fixes.
 The script is idempotent: re-run it after a failure.
 
-See `skills/deploy/SKILL.md` for the full process.
+See `skills/renewvan-deploy/SKILL.md` for the full process.
 
-### `flash-esp32`
+### `renewvan-flash-esp32`
 
 Flashes a renewvan ESP32 board from the `renewvan/driver-esp32` checkout by
 driving its `scripts/flash.sh` (which stamps the version from `git describe`
@@ -90,24 +90,24 @@ commits them). It checks `esphome` and the layout, warns about `-dirty`
 versions, the relay board's `OE` pull-up and the one-board-per-van limit, then
 verifies the retained state, info and health topics on the bus.
 
-See `skills/flash-esp32/SKILL.md` for the full process.
+See `skills/renewvan-flash-esp32/SKILL.md` for the full process.
 
-### `port-dbus-driver`
+### `renewvan-port-dbus-driver`
 
 Turns a Venus OS D-Bus package (`dbus-ads1115`, `dbus_wattcycle_ble`,
 `dbus-autoterm`, `dbus-giandel-bridge`) into a native MQTT driver by following
 the hub's `docs/porting-dbus-to-mqtt-driver.md`. It does not scaffold or
 implement on its own: it inventories the package into strip / keep / add, gets
 the user's go-ahead, then sequences the work: settle entity and topics,
-`create-driver`, test-first port of the sensing logic, manifest and Driver
+`renewvan-create-driver`, test-first port of the sensing logic, manifest and Driver
 info, hub schema + demo scenario + both validators when the entity is new,
 diagnose, review, and finally pin the image in the hub's compose file and hand
-off to `deploy`. Genuine Victron gear is out of scope (that is `driver-venus`'s
+off to `renewvan-deploy`. Genuine Victron gear is out of scope (that is `driver-venus`'s
 remap shape).
 
-See `skills/port-dbus-driver/SKILL.md` for the full process.
+See `skills/renewvan-port-dbus-driver/SKILL.md` for the full process.
 
-### `create-driver`
+### `renewvan-create-driver`
 
 Bootstraps a new `renewvan/driver-<entity>` repo: MQTT publisher skeleton,
 layered `config.default.ini`/`config.ini` loader, `manifest.json` + retained
@@ -117,9 +117,9 @@ device's sensing/publishing logic, and ends by running a fixed design round
 (sensing-vs-remapping, published fields, hub schema, hardware config, hub
 integration) so a real device still gets designed, not left half-built.
 
-See `skills/create-driver/SKILL.md` for the full process.
+See `skills/renewvan-create-driver/SKILL.md` for the full process.
 
-### `build-basemap`
+### `renewvan-build-basemap`
 
 Builds the dashboard's offline `basemap.pmtiles` for a region, city or country
 by name: resolves the area to a bounding box (or outline) via Nominatim, picks
@@ -129,14 +129,14 @@ optionally pushes it to the Pi with the hub's script. Follows
 `renewvan/dashboard`'s `docs/offline-map.md`; the self-build from OpenStreetMap
 route is out of scope.
 
-See `skills/build-basemap/SKILL.md` for the full process.
+See `skills/renewvan-build-basemap/SKILL.md` for the full process.
 
 ## Development
 
 `scripts/build_claude.py` generates `claude/` from `skills/` (see
 "Variants and versions"); commit both.
 
-`skills/create-driver/scripts/scaffold.py` is the one piece of real code
+`skills/renewvan-create-driver/scripts/scaffold.py` is the one piece of real code
 here — everything else is markdown/templates. `tests/test_scaffold.py`
 exercises it end to end (scaffolds into a temp dir, asserts the layout and
 token substitution). Run before opening a PR:

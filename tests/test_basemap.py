@@ -1,4 +1,4 @@
-"""Tests for build-basemap's helper: the offline parts (bbox reordering, tile maths, CLI)."""
+"""Tests for renewvan-build-basemap's helper: the offline parts (bbox reordering, tile maths, CLI)."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 
 BASEMAP = (
-    Path(__file__).resolve().parent.parent / "skills" / "build-basemap" / "scripts" / "basemap.py"
+    Path(__file__).resolve().parent.parent / "skills" / "renewvan-build-basemap" / "scripts" / "basemap.py"
 )
 
 _spec = importlib.util.spec_from_file_location("basemap", BASEMAP)

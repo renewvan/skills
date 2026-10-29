@@ -13,7 +13,7 @@ from pathlib import Path
 SCAFFOLD = (
     Path(__file__).resolve().parent.parent
     / "skills"
-    / "create-driver"
+    / "renewvan-create-driver"
     / "scripts"
     / "scaffold.py"
 )
