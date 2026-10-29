@@ -10,7 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SKILLS = sorted(p for p in (ROOT / "skills").iterdir() if p.is_dir())
-EXPECTED = {"create-driver", "build-basemap", "deploy", "port-dbus-driver", "flash-esp32"}
+EXPECTED = {"renewvan-create-driver", "renewvan-build-basemap", "renewvan-deploy", "renewvan-port-dbus-driver", "renewvan-flash-esp32"}
 
 
 def _frontmatter(path: Path) -> str:
@@ -57,5 +57,5 @@ def test_claude_variant_has_same_version_and_is_in_sync(tmp_path: Path) -> None:
 
 
 def test_claude_variant_copies_supporting_files() -> None:
-    src = ROOT / "skills" / "create-driver" / "scripts" / "scaffold.py"
-    assert filecmp.cmp(src, ROOT / "claude" / "create-driver" / "scripts" / "scaffold.py")
+    src = ROOT / "skills" / "renewvan-create-driver" / "scripts" / "scaffold.py"
+    assert filecmp.cmp(src, ROOT / "claude" / "renewvan-create-driver" / "scripts" / "scaffold.py")
