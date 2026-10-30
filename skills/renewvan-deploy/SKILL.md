@@ -113,7 +113,7 @@ ssh renewvan "pkill chromium || true; sleep 2; WAYLAND_DISPLAY=wayland-0 XDG_RUN
 | rsync `Permission denied` on remote files | File owned by root in synced dir | The deploy script excludes `.venv` dirs from rsync; if other root-owned files appear, `ssh renewvan sudo chown -R $USER <path>` then re-run |
 | `docker compose pull` fails | Registry auth or image tag missing | Check `.env` on the Pi for correct `*_IMAGE_TAG` values; verify the image exists on ghcr.io |
 | `docker compose up -d` fails | Port conflict, OOM, bad env | `ssh renewvan docker compose logs <service>` for the root cause |
-| `node-gps` not running after deploy | No `/dev/ttyACM0` on the Pi, so deploy skips the `gps` profile (a missing `devices:` path would otherwise abort the whole `up -d`) | Plug in the GPS module and re-run `bin/deploy.sh`; it enables the profile when the device exists. Manual start: `docker compose --profile gps up -d` |
+| `driver-gps` not running after deploy | No `/dev/ttyACM0` on the Pi, so deploy skips the `gps` profile (a missing `devices:` path would otherwise abort the whole `up -d`) | Plug in the GPS module and re-run `bin/deploy.sh`; it enables the profile when the device exists. Manual start: `docker compose --profile gps up -d` |
 | SSH times out mid-deploy | Network drop | Re-run `bin/deploy.sh` — it is idempotent |
 | `.env` missing on Pi | First deploy | Script seeds from `.env.example` and exits; fill in secrets on the Pi and re-run |
 | `tank/config.ini` missing | First deploy | Place calibration file at `/etc/renewvan/tank/config.ini` on the Pi and re-run |
