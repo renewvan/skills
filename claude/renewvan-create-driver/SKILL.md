@@ -1,17 +1,17 @@
 ---
 name: renewvan-create-driver
-description: Bootstrap a new renewvan/driver-<entity> repo (MQTT skeleton, layered config, systemd unit, Dockerfile, CI) from the driver-tank reference shape, then run a design round for its topics and hardware interface. Use when the user wants to scaffold a new renewvan device, create driver-<entity>, or start integrating a new device into the renewvan hub.
+description: Bootstrap a new renewvan/driver-<entity> repo (MQTT skeleton, layered config, systemd unit, Dockerfile, CI) from the renewvan/driver-template skeleton, then run a design round for its topics and hardware interface. Use when the user wants to scaffold a new renewvan device, create driver-<entity>, or start integrating a new device into the renewvan hub.
 license: MIT
 metadata:
-  version: "3.0.0"
+  version: "3.1.0"
   domain: renewvan
 argument-hint: "[entity-slug]"
 ---
 
 # Scaffold a renewvan device
 
-Generates a new `driver-<entity>` repo in the shape `renewvan/driver-tank`'s
-README documents as the reference for every `driver-*` repo: a pure-function
+Generates a new `driver-<entity>` repo from `renewvan/driver-template`, the
+reference skeleton for every `driver-*` repo: a pure-function
 core, a layered `config.default.ini`/`config.ini` loader, a persistent MQTT
 publisher with LWT that publishes retained Driver info (from `manifest.json`
 plus the `DRIVER_VERSION` build arg) before `online`, a thin publish loop, a
@@ -47,7 +47,8 @@ python3 scripts/scaffold.py <entity-slug> "<Entity Title>" "<description>" <targ
 
 Resolve `scripts/scaffold.py` against this skill's own directory (the directory
 this `SKILL.md` was loaded from), not the target repo. The
-script copies `templates/driver-skeleton/`, substitutes
+script finds a `renewvan/driver-template` checkout (`$RENEWVAN_DRIVER_TEMPLATE`, a
+sibling `driver-template` directory, else a shallow clone) and runs its renderer, which copies `template/`, substitutes
 `__ENTITY__`/`__ENTITY_TITLE__`/`__PACKAGE__`/`__REPO__`/`__DESCRIPTION__`/
 `__YEAR__` in every path and file, renames the package directory, and strips
 `.tmpl` suffixes — it is deterministic; don't hand-copy or retype any
@@ -61,7 +62,7 @@ fails midway, checks that no `__TOKEN__` placeholder survives, and prints
 ## Step 3 — Commit and publish
 
 ```
-cd <target-dir> && git init -b main && git add -A && git commit -m "Scaffold <repo> from the driver-tank reference shape"
+cd <target-dir> && git init -b main && git add -A && git commit -m "Scaffold <repo> from driver-template"
 ```
 
 If GitHub was requested:

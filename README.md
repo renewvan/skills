@@ -52,7 +52,7 @@ working outside the hub checkout (it still needs a hub checkout to run).
 
 | Skill | Version | Use it to |
 | ----- | ------- | --------- |
-| `renewvan-create-driver` | 3.0.0 | Bootstrap a new `driver-<entity>` repo and run its design round |
+| `renewvan-create-driver` | 3.1.0 | Bootstrap a new `driver-<entity>` repo and run its design round |
 | `renewvan-port-dbus-driver` | 2.0.0 | Port a Venus OS D-Bus package to a native MQTT driver |
 | `renewvan-flash-esp32` | 2.0.0 | Build and flash an ESP32 firmware variant, then verify it on the bus |
 | `renewvan-build-basemap` | 2.0.0 | Build the dashboard's offline PMTiles basemap |
@@ -111,7 +111,7 @@ See `skills/renewvan-port-dbus-driver/SKILL.md` for the full process.
 
 Bootstraps a new `renewvan/driver-<entity>` repo: MQTT publisher skeleton,
 layered `config.default.ini`/`config.ini` loader, `manifest.json` + retained
-Driver info, systemd unit, Dockerfile, CI (tests, manifest gate, release) — the same shape `driver-tank`'s README documents as the reference for
+Driver info, systemd unit, Dockerfile, CI (tests, manifest gate, release) — rendered from the `renewvan/driver-template` repo, the reference skeleton for
 every `driver-*` repo. Scaffolds only; it deliberately does not implement the
 device's sensing/publishing logic, and ends by running a fixed design round
 (sensing-vs-remapping, published fields, hub schema, hardware config, hub
