@@ -3,7 +3,7 @@ name: renewvan-create-driver
 description: Bootstrap a new renewvan/driver-<entity> repo (MQTT skeleton, layered config, systemd unit, Dockerfile, CI) from the renewvan/driver-template skeleton, then run a design round for its topics and hardware interface. Use when the user wants to scaffold a new renewvan device, create driver-<entity>, or start integrating a new device into the renewvan hub.
 license: MIT
 metadata:
-  version: "3.1.0"
+  version: "3.2.0"
   domain: renewvan
 ---
 
@@ -142,14 +142,11 @@ pinned images.
   pass. Scenario format and what it must exercise (optional-absent case,
   alarm/fault step): `hub/docs/demo-mode.md`.
 - **Existing entity**: no demo, and `hub/schema/demo/` stays untouched; the
-  Driver only complies with the entity schema (`hub/docs/porting-dbus-to-mqtt-driver.md`,
+  Driver only complies with the entity schema (`hub/docs/authoring-a-driver.md`,
   "Adding a driver for an existing entity").
 - **Demo fleet**: add the Driver to `hub/schema/demo/fleet.demo-fleet.json` in
   the same change as its first release if Demo mode should show it.
-- **Porting a Venus OS D-Bus package** (`dbus-ads1115`, `dbus_wattcycle_ble`,
-  `dbus-autoterm`, `dbus-giandel-bridge`): follow the recipe in
-  `hub/docs/porting-dbus-to-mqtt-driver.md` alongside the design round. Suggest
-  the `tdd` skill for the sensing logic, `diagnosing-bugs` for failures and
+- **Sensing logic and failures**: suggest the `tdd` skill for the sensing logic, `diagnosing-bugs` for failures and
   `code-review` before merging.
 - **Shipping**: once an image is released, pin its tag in the hub's
   `docker-compose.yml` `image:` line (the single source of truth, not `.env`),

@@ -1,7 +1,7 @@
 # renewvan/skills
 
 Installable agent skills for the **renewvan** ecosystem (see `renewvan/hub`'s
-`CONTEXT.md` for domain vocabulary). Five skills: `renewvan-create-driver`, `renewvan-port-dbus-driver`, `renewvan-flash-esp32`, `renewvan-build-basemap` and `renewvan-deploy`.
+`CONTEXT.md` for domain vocabulary). Four skills: `renewvan-create-driver`, `renewvan-flash-esp32`, `renewvan-build-basemap` and `renewvan-deploy`.
 
 ## Variants and versions
 
@@ -52,8 +52,7 @@ working outside the hub checkout (it still needs a hub checkout to run).
 
 | Skill | Version | Use it to |
 | ----- | ------- | --------- |
-| `renewvan-create-driver` | 3.1.0 | Bootstrap a new `driver-<entity>` repo and run its design round |
-| `renewvan-port-dbus-driver` | 2.0.0 | Port a Venus OS D-Bus package to a native MQTT driver |
+| `renewvan-create-driver` | 3.2.0 | Bootstrap a new `driver-<entity>` repo and run its design round |
 | `renewvan-flash-esp32` | 2.0.0 | Build and flash an ESP32 firmware variant, then verify it on the bus |
 | `renewvan-build-basemap` | 2.0.0 | Build the dashboard's offline PMTiles basemap |
 | `renewvan-deploy` | 2.0.0 | Deploy the hub to the Pi |
@@ -91,21 +90,6 @@ versions, the relay board's `OE` pull-up and the one-board-per-van limit, then
 verifies the retained state, info and health topics on the bus.
 
 See `skills/renewvan-flash-esp32/SKILL.md` for the full process.
-
-### `renewvan-port-dbus-driver`
-
-Turns a Venus OS D-Bus package (`dbus-ads1115`, `dbus_wattcycle_ble`,
-`dbus-autoterm`, `dbus-giandel-bridge`) into a native MQTT driver by following
-the hub's `docs/porting-dbus-to-mqtt-driver.md`. It does not scaffold or
-implement on its own: it inventories the package into strip / keep / add, gets
-the user's go-ahead, then sequences the work: settle entity and topics,
-`renewvan-create-driver`, test-first port of the sensing logic, manifest and Driver
-info, hub schema + demo scenario + both validators when the entity is new,
-diagnose, review, and finally pin the image in the hub's compose file and hand
-off to `renewvan-deploy`. Genuine Victron gear is out of scope (that is `driver-venus`'s
-remap shape).
-
-See `skills/renewvan-port-dbus-driver/SKILL.md` for the full process.
 
 ### `renewvan-create-driver`
 
