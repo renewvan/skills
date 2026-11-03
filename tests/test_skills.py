@@ -10,7 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SKILLS = sorted(p for p in (ROOT / "skills").iterdir() if p.is_dir())
-EXPECTED = {"renewvan-create-driver", "renewvan-build-basemap", "renewvan-deploy", "renewvan-port-dbus-driver", "renewvan-flash-esp32"}
+EXPECTED = {"renewvan-create-driver", "renewvan-build-basemap", "renewvan-deploy", "renewvan-flash-esp32"}
 
 
 def _frontmatter(path: Path) -> str:
