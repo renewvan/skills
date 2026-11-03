@@ -3,7 +3,7 @@ name: renewvan-deploy
 description: Use when deploying the renewvan hub to the Raspberry Pi — running bin/deploy.sh, checking whether a deploy is needed, or verifying a deploy succeeded.
 license: MIT
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
   domain: renewvan
   platforms: raspberry-pi
 ---
@@ -12,7 +12,7 @@ metadata:
 
 Deploy the hub (`bin/deploy.sh`) to the Pi over SSH. The script is idempotent — safe to re-run.
 
-Run everything from the **`renewvan/hub` checkout** (the script and `docker-compose.yml` live there). The hub also ships its own copy of this skill under `.agents/skills/deploy`; this one is the same procedure packaged for installing elsewhere.
+Run everything from the **`renewvan/hub` checkout** (the script and `docker-compose.yml` live there).
 
 ## Step 0 — Find the hub checkout
 

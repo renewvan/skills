@@ -44,9 +44,14 @@ cp -R /tmp/renewvan-skills/claude/* ~/.claude/skills/
 `mattpocock/skills` or `vercel-labs/skills`): point it at `renewvan/skills`,
 skill path `skills/<name>/SKILL.md` (general) or `claude/<name>/SKILL.md`.
 
-`renewvan/hub` ships its own copy of `renewvan-deploy` under `.agents/skills/deploy`
-(symlinked into `.claude/skills`), so you only need to install it here when
-working outside the hub checkout (it still needs a hub checkout to run).
+`renewvan-deploy` can be installed anywhere, but it only runs against a
+`renewvan/hub` checkout (it verifies this in Step 0). The hub does not ship its
+own copy; to use the skills inside the hub checkout, symlink them from a clone
+of this repo so they never drift:
+
+```bash
+ln -s <clone>/skills/renewvan-* <hub>/.agents/skills/
+```
 
 ## Skills
 
@@ -55,7 +60,7 @@ working outside the hub checkout (it still needs a hub checkout to run).
 | `renewvan-create-driver` | 3.2.0 | Bootstrap a new `driver-<entity>` repo and run its design round |
 | `renewvan-flash-esp32` | 2.0.0 | Build and flash an ESP32 firmware variant, then verify it on the bus |
 | `renewvan-build-basemap` | 2.0.0 | Build the dashboard's offline PMTiles basemap |
-| `renewvan-deploy` | 2.0.0 | Deploy the hub to the Pi |
+| `renewvan-deploy` | 2.0.1 | Deploy the hub to the Pi |
 
 How they fit together is in `renewvan/hub`'s `docs/agent-skills.md`.
 
