@@ -1,9 +1,9 @@
 ---
 name: renewvan-flash-esp32
-description: Build and flash a renewvan ESP32 firmware variant (for example esp32-16x-relay) from the driver-esp32 repo over USB or OTA, collecting the WiFi/MQTT secrets and port it needs, then verify the board on the bus. Use when the user wants to flash, reflash, update or OTA an ESP32 board, set up secrets.yaml for it, or check that a flashed relay board works.
+description: Build and flash a renewvan ESP32 firmware variant (for example esp32-16x-relay) from the driver-esp32 repo over USB or OTA, collecting the WiFi/MQTT secrets and port it needs, then verify the board on the bus. Use when the user wants to flash, reflash, update or OTA an ESP32 board, set up the board's secrets file for it, or check that a flashed relay board works.
 license: MIT
 metadata:
-  version: "3.0.0"
+  version: "4.0.0"
   domain: renewvan
   platforms: esp32
 ---
@@ -47,7 +47,7 @@ Ask only for what you cannot infer. These are mechanical inputs:
   by hand, see README).
 - **First flash or update?** First flash is **USB** (board connected to this
   machine). An update can go **OTA** over WiFi once the board has joined the
-  network, using the OTA password in `secrets.yaml`.
+  network, using the OTA password in the board's `secrets/<board>.yaml`.
 - **Serial port** (USB only): list candidates (`ls /dev/cu.usb* /dev/ttyUSB*
   /dev/ttyACM*`) and ask which when there is more than one. If the board is not
   listed, suggest a data (not charge-only) cable and that ESP32 dev boards may
@@ -58,30 +58,35 @@ Ask only for what you cannot infer. These are mechanical inputs:
   uncommitted or untagged code goes on the board. Never refuse; let the user
   decide.
 
-## Step 2 — Secrets (shared file plus one per board)
+## Step 2 — Secrets (one file per board)
 
-Secrets are per board. `secrets.yaml` at the repo root (gitignored) holds what
-every board of the van shares; `secrets/<board>.yaml` (gitignored) holds the
-board's own, and its keys win. `scripts/flash.sh` merges them and refuses a
-board that has no `secrets/<board>.yaml`. **Never print, log or commit either
-file**; when checking them, only report which keys are present or still equal to
-the example placeholders.
+Each board has ONE secrets file, `secrets/<board>.yaml` (gitignored), holding
+everything its build needs. `scripts/flash.sh` builds from that file only and
+refuses a board that has none. A root `secrets.yaml` is not read by `flash.sh`
+(it exists only for a plain `esphome config` and for CI), so do not create or
+ask for one. **Never print, log or commit the file**; when checking it, only
+report which keys are present or still equal to the example placeholders.
 
-If a file does not exist, copy `secrets.yaml.example` (`mkdir -p secrets` for the
-board file) and ask the user for each value (they may prefer to type the secret
-ones into the file themselves; offer that and wait):
+If the file does not exist, `mkdir -p secrets`, copy `secrets.yaml.example` to
+`secrets/<board>.yaml` and ask the user for each value (they may prefer to type
+the secret ones into the file themselves; offer that and wait):
 
-| File | Key | Ask / default |
-| ---- | --- | ------------- |
-| `secrets.yaml` | `wifi_ssid`, `wifi_password` | the van WiFi |
-| `secrets.yaml` | `wifi_ap_fallback_password` | fallback access point password; must not stay `changeme12345` |
-| `secrets.yaml` | `mqtt_broker`, `mqtt_port` | the van's Mosquitto broker (the hub's host) |
-| `secrets/<board>.yaml` | `mqtt_username`, `mqtt_password` | the board's broker account: username `esp32-<board>`, password the hub's `MQTT_ESP32_<BOARD>_PASSWORD` (the board must be listed in the hub's `BROKER_ESP32_BOARDS`) |
-| `secrets/<board>.yaml` | `ota_password` | its own; must not stay `changeme12345` |
-| `secrets/<board>.yaml` | `api_encryption_key` | generate with `esphome secrets api_encryption_key` or `openssl rand -base64 32`; do not keep the example value |
-| `secrets/<board>.yaml` | `ota_address` | optional: the board's IP, used as the OTA target when `--device` is not given |
+| Key | Ask / default |
+| --- | ------------- |
+| `wifi_ssid`, `wifi_password` | the van WiFi |
+| `wifi_ap_fallback_password` | recovery access point password; must not stay `changeme12345` |
+| `mqtt_broker`, `mqtt_port` | the van's Mosquitto broker (the hub's host) |
+| `mqtt_username`, `mqtt_password` | the board's broker account: username `esp32-<board>`, password the hub's `MQTT_ESP32_<BOARD>_PASSWORD` (the board must be listed in the hub's `BROKER_ESP32_BOARDS`) |
+| `ota_password` | its own; must not stay `changeme12345` |
+| `ble_wake_secret` | `esp32-16x-relay` only (BLE wake): what a phone sends to power the hub on over Bluetooth; generate with `openssl rand -hex 12`; must not stay `changeme-ble-wake` |
+| `ota_address` | optional: the board's IP, used as the OTA target when `--device` is not given |
 
-If the files exist, ask whether they are current only when a value still looks
+Two boards on the same WiFi repeat the WiFi lines in their own files: that is
+deliberate, so a board never builds with another board's file. If the user has an
+older checkout that still has a shared root `secrets.yaml` and no
+`secrets/<board>.yaml`-only flow, tell them to update `driver-esp32` first.
+
+If the file exists, ask whether it is current only when a value still looks
 like an example placeholder. These values are compiled into the firmware, so a
 wrong broker, account or WiFi means the board will not come up on the van.
 
@@ -153,8 +158,10 @@ van.
 
 - Do not run `esphome run firmware/<variant>.yaml` directly.
 - Do not download or flash a CI-built binary: it holds placeholder secrets and a
-  known OTA password. Always build from the user's checkout and `secrets.yaml`.
-- Do not commit, echo or paste `secrets.yaml` or any `secrets/<board>.yaml`.
+  known OTA password. Always build from the user's checkout and the board's
+  `secrets/<board>.yaml`.
+- Do not commit, echo or paste any `secrets/<board>.yaml` (or a root
+  `secrets.yaml`).
 - Do not reuse one board's `secrets/<board>.yaml` for another board.
 - Do not add `api:` or `web_server:` to a firmware to make flashing easier; the
   relay contract forbids both.
