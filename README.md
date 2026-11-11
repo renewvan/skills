@@ -58,7 +58,7 @@ ln -s <clone>/skills/renewvan-* <hub>/.agents/skills/
 | Skill | Version | Use it to |
 | ----- | ------- | --------- |
 | `renewvan-create-driver` | 3.2.0 | Bootstrap a new `driver-<entity>` repo and run its design round |
-| `renewvan-flash-esp32` | 3.0.0 | Build and flash an ESP32 firmware variant, then verify it on the bus |
+| `renewvan-flash-esp32` | 4.0.0 | Build and flash an ESP32 firmware variant, then verify it on the bus |
 | `renewvan-build-basemap` | 2.0.0 | Build the dashboard's offline PMTiles basemap |
 | `renewvan-deploy` | 2.0.1 | Deploy the hub to the Pi |
 
@@ -90,8 +90,8 @@ here: it depends on the checkout's `manifests/`, `firmware/`, `packages/` and
 git history, and a copy would drift. The skill instead asks for what is
 missing: the variant, the board name (`--board <name>`, each board is its own
 Driver `esp32-<name>`), USB first flash vs OTA update, the serial port, and the
-shared `secrets.yaml` plus the board's own `secrets/<name>.yaml` (WiFi, broker
-account, OTA password, API key; it never prints or commits them). It checks
+board's one secrets file, `secrets/<name>.yaml` (WiFi, broker account, OTA
+password, BLE wake secret; it never prints or commits it). It checks
 `esphome` and the layout, warns about `-dirty` versions and the relay board's
 `OE` pull-up, then verifies the board's retained state, info and health topics
 on the bus.
