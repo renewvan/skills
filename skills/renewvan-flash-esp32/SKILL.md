@@ -1,14 +1,14 @@
 ---
 name: renewvan-flash-esp32
-description: Build and flash a renewvan ESP32 firmware variant (for example esp32-16x-relay) from the driver-esp32 repo over USB or OTA, collecting the WiFi/MQTT secrets and port it needs, then verify the board on the bus. Use when the user wants to flash, reflash, update or OTA an ESP32 board, set up the board's secrets file for it, or check that a flashed relay board works.
+description: Build and flash a Renewvan ESP32 firmware variant (for example esp32-16x-relay) from the driver-esp32 repo over USB or OTA, collecting the WiFi/MQTT secrets and port it needs, then verify the board on the bus. Use when the user wants to flash, reflash, update or OTA an ESP32 board, set up the board's secrets file for it, or check that a flashed relay board works.
 license: MIT
 metadata:
   version: "4.0.0"
-  domain: renewvan
+  domain: Renewvan
   platforms: esp32
 ---
 
-# Flash a renewvan ESP32 board
+# Flash a Renewvan ESP32 board
 
 Drives `scripts/flash.sh` in the **`renewvan/driver-esp32` checkout**. Source of
 truth: that repo's `README.md` ("Building and flashing", "Version stamp",
