@@ -1,10 +1,10 @@
 ---
 name: renewvan-build-basemap
-description: Build the offline PMTiles basemap (public/maps/basemap.pmtiles) for the renewvan dashboard from a region, city or country name, verify it covers a given point, and optionally push it to the Pi. Use when the user wants to make, rebuild, resize or change the area of the dashboard's offline map, or the Map page is empty or shows "Offline map unavailable".
+description: Build the offline PMTiles basemap (public/maps/basemap.pmtiles) for the Renewvan dashboard from a region, city or country name, verify it covers a given point, and optionally push it to the Pi. Use when the user wants to make, rebuild, resize or change the area of the dashboard's offline map, or the Map page is empty or shows "Offline map unavailable".
 license: MIT
 metadata:
   version: "2.0.0"
-  domain: renewvan
+  domain: Renewvan
 argument-hint: "[place]"
 allowed-tools: Bash, Read
 ---

@@ -1,16 +1,16 @@
 ---
 name: renewvan-deploy
-description: Use when deploying the renewvan hub to the Raspberry Pi — running bin/deploy.sh, checking whether a deploy is needed, or verifying a deploy succeeded.
+description: Use when deploying the Renewvan hub to the Raspberry Pi — running bin/deploy.sh, checking whether a deploy is needed, or verifying a deploy succeeded.
 license: MIT
 metadata:
   version: "2.0.1"
-  domain: renewvan
+  domain: Renewvan
   platforms: raspberry-pi
 allowed-tools: Bash
 argument-hint: "[--host <ssh-alias>]"
 ---
 
-# renewvan hub deploy
+# Renewvan hub deploy
 
 Deploy the hub (`bin/deploy.sh`) to the Pi over SSH. The script is idempotent — safe to re-run.
 

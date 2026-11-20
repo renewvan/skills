@@ -1,6 +1,6 @@
 # renewvan/skills
 
-Installable agent skills for the **renewvan** ecosystem (see `renewvan/hub`'s
+Installable agent skills for the **Renewvan** ecosystem (see `renewvan/hub`'s
 `CONTEXT.md` for domain vocabulary). Four skills: `renewvan-create-driver`, `renewvan-flash-esp32`, `renewvan-build-basemap` and `renewvan-deploy`.
 
 ## Variants and versions
@@ -83,7 +83,7 @@ See `skills/renewvan-deploy/SKILL.md` for the full process.
 
 ### `renewvan-flash-esp32`
 
-Flashes a renewvan ESP32 board from the `renewvan/driver-esp32` checkout by
+Flashes a Renewvan ESP32 board from the `renewvan/driver-esp32` checkout by
 driving its `scripts/flash.sh` (which stamps the version from `git describe`
 and merges the variant's manifest). The script is deliberately **not** copied
 here: it depends on the checkout's `manifests/`, `firmware/`, `packages/` and

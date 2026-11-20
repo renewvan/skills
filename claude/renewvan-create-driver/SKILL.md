@@ -1,14 +1,14 @@
 ---
 name: renewvan-create-driver
-description: Bootstrap a new renewvan/driver-<entity> repo (MQTT skeleton, layered config, systemd unit, Dockerfile, CI) from the renewvan/driver-template skeleton, then run a design round for its topics and hardware interface. Use when the user wants to scaffold a new renewvan device, create driver-<entity>, or start integrating a new device into the renewvan hub.
+description: Bootstrap a new renewvan/driver-<entity> repo (MQTT skeleton, layered config, systemd unit, Dockerfile, CI) from the renewvan/driver-template skeleton, then run a design round for its topics and hardware interface. Use when the user wants to scaffold a new Renewvan device, create driver-<entity>, or start integrating a new device into the Renewvan hub.
 license: MIT
 metadata:
   version: "3.2.0"
-  domain: renewvan
+  domain: Renewvan
 argument-hint: "[entity-slug]"
 ---
 
-# Scaffold a renewvan device
+# Scaffold a Renewvan device
 
 Generates a new `driver-<entity>` repo from `renewvan/driver-template`, the
 reference skeleton for every `driver-*` repo: a pure-function
