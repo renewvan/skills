@@ -24,7 +24,7 @@ and must never reimplement it by hand. Confirm the working directory, or
 
 ```bash
 test -f bin/deploy.sh && test -f docker-compose.yml && test -f bin/bootstrap-pi.sh \
-  && head -1 CONTEXT.md | grep -qx '# renewvan Hub' && echo "hub checkout"
+  && head -1 CONTEXT.md | grep -qix '# renewvan hub' && echo "hub checkout"
 ```
 
 All four must hold: other repos can also have a `bin/deploy.sh` and
